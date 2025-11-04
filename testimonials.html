@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Testimonials Section</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #6366f1;
+            --secondary: #8b5cf6;
+            --dark: #0f0f0f;
+            --darker: #0b0b0b;
+            --light: #f1f5f9;
+            --gray: #94a3b8;
+            --card-bg: rgba(15, 15, 15, 0.7);
+            --transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background: linear-gradient(135deg, var(--darker), #1a1a1a);
+            color: var(--light);
+            line-height: 1.6;
+            min-height: 100vh;
+            padding: 60px 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        /* Section Header */
+        .section-header {
+            text-align: center;
+            margin-bottom: 70px;
+        }
+
+        .section-header h2 {
+            font-size: 2.5rem;
+            margin-bottom: 15px;
+            font-weight: 700;
+            position: relative;
+            display: inline-block;
+        }
+
+        .section-header h2::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            border-radius: 2px;
+        }
+
+        .section-header p {
+            color: var(--gray);
+            max-width: 600px;
+            margin: 20px auto 0;
+            font-size: 1.1rem;
+        }
+
+        /* Testimonials Section */
+        .testimonials {
+            padding: 100px 0;
+        }
+
+        /* Carousel Container */
+        .testimonials-carousel {
+            position: relative;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .testimonial-card {
+            background: var(--card-bg);
+            border-radius: 15px;
+            padding: 40px;
+            border: 1px solid rgba(148, 163, 184, 0.1);
+            backdrop-filter: blur(10px);
+            text-align: center;
+            opacity: 0;
+            transform: translateX(100px);
+            transition: opacity 0.6s ease, transform 0.6s ease;
+            position: absolute;
+            width: 100%;
+            min-height: 350px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .testimonial-card.active {
+            opacity: 1;
+            transform: translateX(0);
+            position: relative;
+        }
+
+        .testimonial-card.prev {
+            opacity: 0;
+            transform: translateX(-100px);
+        }
+
+        /* Star Rating */
+        .stars {
+            margin-bottom: 25px;
+            font-size: 1.3rem;
+            letter-spacing: 5px;
+        }
+
+        .stars i {
+            color: #fbbf24;
+        }
+
+        /* Testimonial Text */
+        .testimonial-text {
+            font-size: 1.1rem;
+            color: var(--light);
+            margin-bottom: 30px;
+            line-height: 1.8;
+            font-style: italic;
+        }
+
+        /* Client Info */
+        .client-info {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 20px;
+        }
+
+        .client-avatar {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            color: white;
+            font-weight: 700;
+        }
+
+        .client-details h4 {
+            font-size: 1.2rem;
+            margin-bottom: 5px;
+            font-weight: 600;
+        }
+
+        .client-title {
+            color: var(--gray);
+            font-size: 0.95rem;
+        }
+
+        /* Navigation Controls */
+        .carousel-controls {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 50px;
+        }
+
+        .nav-btn {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: rgba(99, 102, 241, 0.1);
+            border: 1px solid rgba(99, 102, 241, 0.3);
+            color: var(--primary);
+            cursor: pointer;
+            font-size: 1.2rem;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .nav-btn:hover {
+            background: var(--primary);
+            color: white;
+            transform: translateY(-5px);
+        }
+
+        /* Dots Indicator */
+        .carousel-dots {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            margin-top: 30px;
+        }
+
+        .dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: rgba(99, 102, 241, 0.2);
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .dot.active {
+            background: var(--primary);
+            transform: scale(1.3);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .section-header h2 {
+                font-size: 2rem;
+            }
+
+            .testimonial-card {
+                padding: 30px;
+                min-height: 400px;
+            }
+
+            .testimonial-text {
+                font-size: 1rem;
+            }
+
+            .client-avatar {
+                width: 70px;
+                height: 70px;
+                font-size: 1.5rem;
+            }
+
+            .client-info {
+                flex-direction: column;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .section-header h2 {
+                font-size: 1.8rem;
+            }
+
+            .testimonial-card {
+                padding: 20px;
+                min-height: 380px;
+            }
+
+            .testimonial-text {
+                font-size: 0.95rem;
+                margin-bottom: 20px;
+            }
+
+            .nav-btn {
+                width: 45px;
+                height: 45px;
+                font-size: 1rem;
+            }
+
+            .carousel-controls {
+                gap: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Section Header -->
+        <div class="section-header">
+            <h2>Client Testimonials</h2>
+            <p>See what clients and partners have to say about my work and professionalism</p>
+        </div>
+
+        <!-- Testimonials Carousel -->
+        <div class="testimonials">
+            <div class="testimonials-carousel">
+                <!-- Testimonial 1 -->
+                <div class="testimonial-card active">
+                    <div class="stars">
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                    </div>
+                    <p class="testimonial-text">
+                        "Lushegs transformed our e-commerce platform completely. The attention to detail and performance optimization exceeded our expectations. Highly recommended!"
+                    </p>
+                    <div class="client-info">
+                        <div class="client-avatar">AK</div>
+                        <div class="client-details">
+                            <h4>Amara Kingsley</h4>
+                            <p class="client-title">Founder, Digital Store Co.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Testimonial 2 -->
+                <div class="testimonial-card">
+                    <div class="stars">
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                    </div>
+                    <p class="testimonial-text">
+                        "Working with Lushegs on ScanMark was seamless. The solution was innovative and solved our attendance tracking challenges perfectly. Great communication throughout!"
+                    </p>
+                    <div class="client-info">
+                        <div class="client-avatar">DC</div>
+                        <div class="client-details">
+                            <h4>Dr. Charles Okonkwo</h4>
+                            <p class="client-title">Department Head, Tech Academy</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Testimonial 3 -->
+                <div class="testimonial-card">
+                    <div class="stars">
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                    </div>
+                    <p class="testimonial-text">
+                        "The Nestly platform connects students with hostels effortlessly. Lushegs built it with such care and user experience in mind. It's now helping hundreds of students!"
+                    </p>
+                    <div class="client-info">
+                        <div class="client-avatar">FO</div>
+                        <div class="client-details">
+                            <h4>Fawaz</h4>
+                            <p class="client-title">Founder, Nestly</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Testimonial 4 -->
+                <div class="testimonial-card">
+                    <div class="stars">
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                    </div>
+                    <p class="testimonial-text">
+                        "Professional, responsive, and creative. Lushegs delivered our website on time and continues to provide excellent support. A true partner for our business!"
+                    </p>
+                    <div class="client-info">
+                        <div class="client-avatar">TM</div>
+                        <div class="client-details">
+                            <h4>Tunde Moremi</h4>
+                            <p class="client-title">CEO, StartUp Innovations</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Dots Indicator -->
+            <div class="carousel-dots">
+                <div class="dot active" onclick="goToTestimonial(0)"></div>
+                <div class="dot" onclick="goToTestimonial(1)"></div>
+                <div class="dot" onclick="goToTestimonial(2)"></div>
+                <div class="dot" onclick="goToTestimonial(3)"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentIndex = 0;
+        const cards = document.querySelectorAll('.testimonial-card');
+        const dots = document.querySelectorAll('.dot');
+        const totalCards = cards.length;
+
+        function updateCarousel() {
+            cards.forEach((card, index) => {
+                card.classList.remove('active', 'prev');
+                if (index === currentIndex) {
+                    card.classList.add('active');
+                } else if (index < currentIndex) {
+                    card.classList.add('prev');
+                }
+            });
+
+            dots.forEach((dot, index) => {
+                dot.classList.toggle('active', index === currentIndex);
+            });
+        }
+
+        function nextTestimonial() {
+            currentIndex = (currentIndex + 1) % totalCards;
+            updateCarousel();
+        }
+
+        function previousTestimonial() {
+            currentIndex = (currentIndex - 1 + totalCards) % totalCards;
+            updateCarousel();
+        }
+
+        function goToTestimonial(index) {
+            currentIndex = index;
+            updateCarousel();
+        }
+
+        // Auto-advance every 6 seconds
+        setInterval(nextTestimonial, 6000);
+    </script>
+</body>
+</html>
